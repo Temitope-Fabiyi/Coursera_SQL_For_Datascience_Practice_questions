@@ -1,0 +1,61 @@
+Question 1
+All of the questions in this quiz pull from the open source Chinook Database. 
+Please refer to the ER Diagram below and familiarize yourself with the table and column names to write accurate queries and get the appropriate answers.
+
+How many albums does the artist Led Zeppelin have? 
+SOLUTION:
+select count(*) from (select *
+from artists
+left join albums
+on artists.ArtistId=albums.ArtistId)
+where Name="Led Zeppelin";
+
+__NOTE: The code returned 14
+
+Question 2
+Create a list of album titles and the unit prices for the artist "Audioslave".
+
+SOLUTION:
+select a.UnitPrice,b.Title,b.Name
+from (select tracks.AlbumId,invoice_items.UnitPrice
+from tracks
+left join invoice_items
+on tracks.TrackId=invoice_items.TrackId) as a
+left join (select artists.Name,albums.Title,albums.AlbumId
+from artists
+left join albums
+on artists.ArtistId=albums.ArtistId) as b
+on a.AlbumId=b.AlbumId
+where b.Name="Audioslave";
+
+__How many records are returned?
+Only 25 records will be shown in the output so please look at the bottom of the output to see how many records were retrieved.
+Answer: 40
+
+Question 3
+Find the first and last name of any customer who does not have an invoice. Are there any customers returned from the query?
+
+SOLUTION:
+SELECT FirstName, LastName, invoiceid
+FROM (SELECT customers.FirstName, customers.LastName, invoices.invoiceId
+FROM customers
+LEFT JOIN invoices
+ON customers.CustomerId = invoices.CustomerId
+WHERE invoices.invoiceId IS NULL);
+
+__NOTE: The code returned Zero Rows
+
+Question 4
+Find the total price for each album.
+What is the total price for the album “Big Ones”?
+
+SOLUTION:
+SELECT tracks.AlbumId, albums.Title, SUM (invoice_items.UnitPrice) AS TotalPrice
+FROM tracks 
+JOIN albums ON tracks.AlbumId= albums.AlbumId 
+JOIN invoice_items ON tracks.TrackId=invoice_items.TrackId
+WHERE albums.Title = "Big Ones"
+GROUP BY tracks.AlbumId, albums.Title, invoice_items.UnitPrice
+
+__NOTE: The code returned 9.9 
+
