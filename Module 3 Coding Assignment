@@ -1,0 +1,80 @@
+All of the questions in this quiz refer to the open source Chinook Database. Please familiarize yourself with the 
+ER diagram in order to familiarize yourself with the table and column names in order to write accurate queries and get the appropriate answers.
+
+Question 1
+Using a subquery, find the names of all the tracks for the album "Californication".
+
+Solution:
+SELECT TrackId, Name, AlbumId
+FROM Tracks 
+WHERE AlbumId IN (SELECT AlbumId
+    FROM Albums
+    WHERE Title = 'Californication');
+
+Question 2 
+Find the total number of invoices for each customer along with the customer's full name, city and email.
+
+Solution:
+SELECT FirstName, LastName, City, Email, COUNT (Invoices.CustomerId) AS Total_Invoices
+FROM Customers JOIN Invoices
+ON Customers.CustomerId = Invoices.CustomerId
+GROUP BY Customers.CustomerId;
+
+Question 3
+Retrieve the track name, album, artistID, and trackID for all the albums.
+
+Solution:
+SELECT TrackId, Name, Title, ArtistID
+FROM Tracks JOIN Albums
+WHERE Tracks.AlbumId = Albums.AlbumId
+
+Question 4:
+Retrieve a list with the managers last name, and the last name of the employees who report to him or her.
+
+Solution:
+SELECT 
+    M.Lastname AS ManagerLastName, 
+    E.Lastname AS EmployeeLastName
+FROM 
+    Employees AS M
+JOIN 
+    Employees AS E ON M.EmployeeID = E.Reportsto
+
+Question 5:
+Find the name and ID of the artists who do not have albums. 
+
+Solution:
+SELECT Artists.Name AS Prof, Artists.ArtistId AS Identity, Albums.Title AS Headings
+FROM Artists LEFT JOIN Albums
+ON Artists.ArtistId = Albums.ArtistId
+WHERE Headings IS NULL
+
+Question 6:
+Use a UNION to create a list of all the employee's and customer's first names and last names ordered by the last name in descending order.
+
+Solution:
+SELECT LastName, FirstName
+FROM Employees
+UNION
+SELECT lastName, firstName
+FROM Customers
+ORDER BY LastName DESC
+
+Question 7:
+See if there are any customers who have a different city listed in their billing city versus their customer city.
+
+Solution:
+SELECT Invoices.BillingCity, Customers.City
+FROM Customers JOIN Invoices
+ON Customers.CustomerId = Invoices.CustomerId
+WHERE BillingCity <> Customers.City
+
+
+
+
+
+
+
+
+
+
